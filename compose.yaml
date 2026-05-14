@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: tp1DevOps
+    ports:
+      - "5432:5432"
+    # Docker vérifie régulièrement si Postgres accepte des connexions.
+    # Les autres services attendent que ce check passe avant de démarrer.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tp1DevOps"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  api:
+    build: ./server
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_NAME: tp1DevOps
+    # L'API ne démarre qu'une fois la DB healthy (pg_isready OK)
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  client:
+    build: ./client
+    # Le client démarre après l'API (simple ordre, pas de healthcheck nécessaire)
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+volumes:
+  db_data:

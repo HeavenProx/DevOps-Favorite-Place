@@ -59,6 +59,7 @@ usersRouter.post("/tokens", async (req, res) => {
       return res.status(400).json({ message: `wrong credentials` });
     }
   } catch (err) {
+    console.error(`🆘 argon2.verify error:`, err);
     return res.status(400).json({ message: `wrong credentials` });
   }
 });
