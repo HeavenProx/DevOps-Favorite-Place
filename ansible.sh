@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e  # Exit immediately if any command fails
 
 # Run Ansible playbook to configure the Docker Swarm cluster.
 # Prerequisites:
