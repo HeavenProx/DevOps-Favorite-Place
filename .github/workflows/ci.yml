@@ -59,11 +59,15 @@ jobs:
         with:
           context: ./server
           push: true
-          tags: ghcr.io/${{ env.OWNER }}/mfp-server:latest
+          tags: |
+            ghcr.io/${{ env.OWNER }}/mfp-server:latest
+            ghcr.io/${{ env.OWNER }}/mfp-server:main
 
       - name: Build & push client image
         uses: docker/build-push-action@v6
         with:
           context: ./client
           push: true
-          tags: ghcr.io/${{ env.OWNER }}/mfp-client:latest
+          tags: |
+            ghcr.io/${{ env.OWNER }}/mfp-client:latest
+            ghcr.io/${{ env.OWNER }}/mfp-client:main

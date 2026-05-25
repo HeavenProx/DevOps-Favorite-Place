@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: tp1DevOps
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
+  api:
+    image: ghcr.io/heavenprox/mfp-server:main
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_NAME: tp1DevOps
+    networks:
+      - backend
+      - web
+    depends_on:
+      - db
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.mfp-api.rule=Host(`api.swarm.localhost`)"
+        - "traefik.http.routers.mfp-api.entrypoints=web"
+        - "traefik.http.services.mfp-api.loadbalancer.server.port=3000"
+
+networks:
+  backend:
+    driver: overlay
+  web:
+    external: true
+
+volumes:
+  db_data:
