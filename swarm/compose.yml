@@ -2,6 +2,8 @@ services:
   manager:
     build: .
     privileged: true
+    ports:
+      - "80:80"  # Expose Traefik HTTP port to the host machine
   node:
     build: .
     privileged: true

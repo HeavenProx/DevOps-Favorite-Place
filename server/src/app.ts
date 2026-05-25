@@ -10,7 +10,7 @@ app.use(express.json());
 app.use("/api", apiRouter);
 
 // hello endpoint
-app.get("/", (_, res) => {
+app.get("/hello", (_, res) => {
   res.send("Bonjour !");
 });
 
