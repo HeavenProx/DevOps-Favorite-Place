@@ -9,6 +9,11 @@ app.use(express.json());
 // use the router to answers request on /api
 app.use("/api", apiRouter);
 
+// hello endpoint
+app.get("/", (_, res) => {
+  res.send("Bonjour !");
+});
+
 // return HTTP 404 if the request has not been handled
 app.use((_, res) => {
   res.status(404).send();
