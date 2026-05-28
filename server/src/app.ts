@@ -11,7 +11,8 @@ app.use("/api", apiRouter);
 
 // hello endpoint
 app.get("/hello", (_, res) => {
-  res.send("Bonjour !");
+  // res.send("Bonjour !");
+  res.send("Hello !");
 });
 
 // return HTTP 404 if the request has not been handled
